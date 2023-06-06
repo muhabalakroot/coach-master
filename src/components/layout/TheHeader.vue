@@ -9,12 +9,20 @@
           <router-link to="/coaches">All Coaches</router-link>
         </li>
         <li>
-          <router-link to="/requests">Requests</router-link>
+          <router-link v-if="isAuth" to="/requests">Requests</router-link>
         </li>
       </ul>
     </nav>
   </header>
 </template>
+<script>
+import { mapGetters } from 'vuex';
+export default {
+  computed: {
+    ...mapGetters(['isAuth']),
+  },
+};
+</script>
 
 <style scoped>
 header {

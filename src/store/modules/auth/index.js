@@ -26,7 +26,7 @@ const AuthModule = {
           }
         );
         console.log(res.data);
-        context.commite('setData', {
+        context.commit('setData', {
           idToken: res.data.idToken,
           expiresIn: res.data.expiresIn,
           localId: res.data.localId,
@@ -46,7 +46,7 @@ const AuthModule = {
           }
         );
         console.log(res.data);
-        context.commite('setData', {
+        context.commit('setData', {
           idToken: res.data.idToken,
           expiresIn: res.data.expiresIn,
           localId: res.data.localId,
@@ -59,6 +59,12 @@ const AuthModule = {
   getters: {
     userId(state) {
       return state.userId;
+    },
+    getToken(state) {
+      return state.idToken;
+    },
+    isAuth(state) {
+      return !!state.idToken;
     },
   },
 };

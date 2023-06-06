@@ -86,7 +86,7 @@ export default {
           });
         }
       } catch (err) {
-        console.log('here' + err);
+        console.log('here is the log');
         this.error = err.message || 'Faild to Signup';
       }
 
