@@ -1,23 +1,34 @@
 <template>
-  <base-card>
-    <form @submit.prevent="submitForm">
-      <div class="form-control">
-        <label for="email">Email</label>
-        <input type="email" id="email" v-model="email" />
-      </div>
-      <div class="form-control">
-        <label for="password">Password</label>
-        <input type="password" id="password" v-model="password" />
-      </div>
-      <p v-if="!formIsValid">Incorrect Email or Password</p>
-      <div class="actions">
-        <base-button>{{ buttonCaption }}</base-button>
-        <base-button type="button" mode="flat" @click="switchButton">{{
-          switchButtonCaption
-        }}</base-button>
-      </div>
-    </form>
-  </base-card>
+  <div>
+    <base-dialog
+      :show="!!error"
+      @close="closeDialog"
+      title="an Error Accoured"
+      >{{ error }}</base-dialog
+    >
+    <base-dialog :show="isLoading" title="Loading...">
+      <base-spinner></base-spinner>
+    </base-dialog>
+    <base-card>
+      <form @submit.prevent="submitForm">
+        <div class="form-control">
+          <label for="email">Email</label>
+          <input type="email" id="email" v-model="email" />
+        </div>
+        <div class="form-control">
+          <label for="password">Password</label>
+          <input type="password" id="password" v-model="password" />
+        </div>
+        <p v-if="!formIsValid">Incorrect Email or Password</p>
+        <div class="actions">
+          <base-button>{{ buttonCaption }}</base-button>
+          <base-button type="button" mode="flat" @click="switchButton">{{
+            switchButtonCaption
+          }}</base-button>
+        </div>
+      </form>
+    </base-card>
+  </div>
 </template>
 
 <script>
@@ -28,6 +39,8 @@ export default {
       password: '',
       formIsValid: true,
       mode: 'login',
+      isLoading: false,
+      error: null,
     };
   },
   computed: {
@@ -47,7 +60,7 @@ export default {
     },
   },
   methods: {
-    submitForm() {
+    async submitForm() {
       this.formIsValid = true;
       if (
         this.email === '' ||
@@ -57,14 +70,27 @@ export default {
         this.formIsValid = false;
         return;
       }
-      if (this.mode === 'login') {
-        //
-      } else {
-        this.$store.dispatch('signup', {
-          password: this.password,
-          email: this.email,
-        });
+
+      this.isLoading = true;
+
+      try {
+        if (this.mode === 'login') {
+          await this.$store.dispatch('login', {
+            password: this.password,
+            email: this.email,
+          });
+        } else {
+          await this.$store.dispatch('signup', {
+            password: this.password,
+            email: this.email,
+          });
+        }
+      } catch (err) {
+        console.log('here' + err);
+        this.error = err.message || 'Faild to Signup';
       }
+
+      this.isLoading = false;
     },
     switchButton() {
       if (this.mode === 'login') {
@@ -72,6 +98,9 @@ export default {
       } else {
         this.mode = 'login';
       }
+    },
+    closeDialog() {
+      this.error = null;
     },
   },
 };

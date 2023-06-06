@@ -16,6 +16,25 @@ const AuthModule = {
     },
   },
   actions: {
+    async login(context, payload) {
+      try {
+        const res = await axios.post(
+          'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAmEMYPgHDkqAno7Ucop8m8De0gmqMNBZY',
+          {
+            email: payload.email,
+            password: payload.password,
+          }
+        );
+        console.log(res.data);
+        context.commite('setData', {
+          idToken: res.data.idToken,
+          expiresIn: res.data.expiresIn,
+          localId: res.data.localId,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    },
     async signup(context, payload) {
       try {
         const res = await axios.post(
@@ -23,6 +42,7 @@ const AuthModule = {
           {
             email: payload.email,
             password: payload.password,
+            returnSecureToken: true,
           }
         );
         console.log(res.data);
