@@ -11,15 +11,25 @@
         <li>
           <router-link v-if="isAuth" to="/requests">Requests</router-link>
         </li>
+        <li>
+          <base-button v-if="isAuth" @click="logout">Logout</base-button>
+        </li>
       </ul>
     </nav>
   </header>
 </template>
 <script>
 import { mapGetters } from 'vuex';
+
 export default {
   computed: {
     ...mapGetters(['isAuth']),
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('logout');
+      this.$router.replace('/coaches');
+    },
   },
 };
 </script>

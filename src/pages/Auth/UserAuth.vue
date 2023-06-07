@@ -85,6 +85,8 @@ export default {
             email: this.email,
           });
         }
+        const red = `/${this.$route.query.red}` || '/coaches';
+        this.$router.replace(red);
       } catch (err) {
         console.log('here is the log');
         this.error = err.message || 'Faild to Signup';

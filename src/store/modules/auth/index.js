@@ -55,6 +55,13 @@ const AuthModule = {
         console.log(err);
       }
     },
+    logout(context) {
+      context.commit('setData', {
+        idToken: null,
+        expiresIn: null,
+        localId: null,
+      });
+    },
   },
   getters: {
     userId(state) {
