@@ -36,8 +36,10 @@ const router = createRouter({
     { path: '/:notFound(.*)', component: NotFound },
   ],
 });
+router.beforeEach((to, _, next) => {
+  console.log(store.getters.isAuth);
+  console.log(to);
 
-router.beforeEach(function (to, from, next) {
   if (to.meta.requierAuth && !store.getters.isAuth) {
     next('/auth');
   } else if (to.meta.requierUnauth && store.getters.isAuth) {
